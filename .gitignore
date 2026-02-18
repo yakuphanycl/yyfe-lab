@@ -24,3 +24,12 @@ __pycache__/
 *.pyo
 # runtime artifacts
 output/
+# build artifacts
+dist/
+build/
+*.egg-info/
+**/*.egg-info/
+
+# runtime artifacts
+output/
+logs/
