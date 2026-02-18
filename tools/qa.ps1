@@ -1,31 +1,27 @@
-param(
-  [string]$Python = "python"
-)
+$ErrorActionPreference = 'Stop'
 
-$ErrorActionPreference = "Stop"
-
-Write-Host "YY-FE QA: start" -ForegroundColor Cyan
-Write-Host "PWD: $PWD" -ForegroundColor DarkGray
-
-function Run([string[]]$cmd) {
-  $line = ($cmd -join " ")
-  Write-Host "Running: $line" -ForegroundColor Yellow
-  & $cmd[0] $cmd[1..($cmd.Length-1)]
+function Run([string]$line) {
+  Write-Host "Running: $line" -ForegroundColor Cyan
+  & powershell -NoProfile -Command $line
   if ($LASTEXITCODE -ne 0) {
     throw "Command failed (exit=$LASTEXITCODE): $line"
   }
 }
 
-# 1) Syntax sanity
-Run @($Python, "-m", "compileall", "-q", "src")
+Write-Host ""
+Write-Host "YY-FE QA: start" -ForegroundColor Green
+Write-Host "PWD: $(Get-Location)" -ForegroundColor DarkGray
 
-# 2) Tests
-Run @($Python, "-m", "pytest", "-q")
+# 1) Syntax/bytecode sanity
+Run "python -m compileall -q src"
 
-# 3) Editable install (best-effort, but we treat failure as real failure to surface env issues)
-Run @($Python, "-m", "pip", "install", "-e", ".")
+# 2) Install editable FIRST so src-layout imports work in tests
+Run "python -m pip install -e ."
 
-# 4) Build (sdist+wheel)
-Run @($Python, "-m", "build")
+# 3) Tests (now imports resolve)
+Run "python -m pytest -q"
+
+# 4) Build artifacts
+Run "python -m build"
 
 Write-Host "YY-FE QA: PASS" -ForegroundColor Green
