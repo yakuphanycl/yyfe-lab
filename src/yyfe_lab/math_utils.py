@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import List
 
 
 def divide(a: float, b: float) -> float:
@@ -20,7 +19,7 @@ def percentage(value: float, total: float) -> float:
     return (value / total) * 100.0
 
 
-def moving_average(values: Iterable[float], window: int) -> List[float]:
+def moving_average(values: Iterable[float], window: int) -> list[float]:
     """Compute simple moving average over an iterable.
 
     Rules (intentionally incomplete for the lab):
@@ -30,7 +29,7 @@ def moving_average(values: Iterable[float], window: int) -> List[float]:
     vals = list(values)
     if window <= 0:
         raise ValueError("window must be > 0")
-    out: List[float] = []
+    out: list[float] = []
     for i in range(0, len(vals) - window + 1):
         chunk = vals[i : i + window]
         out.append(sum(chunk) / float(window))

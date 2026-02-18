@@ -16,7 +16,16 @@ def main() -> int:
     _ = Policy.load(args.policy)
 
     if args.cmd == "golden":
-        r = run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(Path("tools") / "golden.ps1")])
+        r = run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                str(Path("tools") / "golden.ps1"),
+            ]
+        )
         print(r.stdout, end="")
         if not r.ok:
             print(r.stderr, end="")

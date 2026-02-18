@@ -1,6 +1,6 @@
-﻿import pytest
+import pytest
 
-from yyfe_lab.math_utils import divide, percentage, moving_average
+from yyfe_lab.math_utils import divide, moving_average, percentage
 
 
 def test_divide_basic():

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 
 @dataclass(frozen=True)
@@ -16,7 +16,7 @@ class Policy:
     forbidden_patterns: list[str]
 
     @classmethod
-    def load(cls, path: str | Path) -> "Policy":
+    def load(cls, path: str | Path) -> Policy:
         p = Path(path)
         data = json.loads(p.read_text(encoding="utf-8"))
         return cls(
@@ -41,7 +41,9 @@ class Policy:
     def check_diff_constraints(self, changed_files: Iterable[str], diff_text: str) -> None:
         files = list(dict.fromkeys(changed_files))
         if len(files) > self.max_files_per_patch:
-            raise ValueError(f"Patch touches too many files ({len(files)} > {self.max_files_per_patch})")
+            raise ValueError(
+                f"Patch touches too many files ({len(files)} > {self.max_files_per_patch})"
+            )
 
         lines = diff_text.splitlines()
         if len(lines) > self.max_patch_lines:

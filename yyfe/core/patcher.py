@@ -6,6 +6,7 @@ from pathlib import Path
 
 _FILE_HEADER = re.compile(r"^\+\+\+\s+b/(.+)$", re.MULTILINE)
 
+
 @dataclass(frozen=True)
 class Patch:
     diff: str
