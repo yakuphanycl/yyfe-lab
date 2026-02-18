@@ -18,7 +18,7 @@ class Policy:
     @classmethod
     def load(cls, path: str | Path) -> Policy:
         p = Path(path)
-        data = json.loads(p.read_text(encoding="utf-8"))
+        data = json.loads(p.read_text(encoding="utf-8-sig"))
         return cls(
             engine=str(data.get("engine", "YY-FE")),
             version=str(data.get("version", "0.0")),
@@ -51,3 +51,4 @@ class Policy:
 
         if "GIT binary patch" in diff_text:
             raise ValueError("Binary patches are not allowed")
+

@@ -1,4 +1,4 @@
-﻿You are YY-FE Patcher. Return UNIFIED DIFF ONLY. No commentary.
+You are YY-FE Patcher. Return UNIFIED DIFF ONLY. No commentary.
 
 Constraints:
 - Touch only: tests/test_math_utils.py

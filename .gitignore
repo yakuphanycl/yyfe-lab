@@ -33,3 +33,6 @@ build/
 # runtime artifacts
 output/
 logs/
+# local temp
+.tmp/
+output/

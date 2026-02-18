@@ -1,4 +1,4 @@
-﻿# TASK-001 — Fill missing edge-case tests for math_utils
+# TASK-001 — Fill missing edge-case tests for math_utils
 
 ## Goal
 Expand tests for src/math_utils.py to cover edge cases and define expected behavior.
