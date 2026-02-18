@@ -12,3 +12,7 @@ build/
 # python caches
 __pycache__/
 *.pyc
+
+# setuptools egg-info
+**/*.egg-info/
+
