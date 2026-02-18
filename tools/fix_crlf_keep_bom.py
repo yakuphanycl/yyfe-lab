@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 TEXT_EXTS = {".py",".ps1",".txt",".md",".json",".yml",".yaml",".toml",".ini",".cfg",".csv"}
 
