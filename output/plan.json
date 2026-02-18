@@ -1,0 +1,18 @@
+{
+  "version": "0.1",
+  "policy_path": "policy.json",
+  "actions": [
+    {
+      "id": "golden",
+      "type": "run",
+      "cmd": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tools/golden.ps1"
+      ]
+    }
+  ]
+}
