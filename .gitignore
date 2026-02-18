@@ -36,3 +36,6 @@ logs/
 # local temp
 .tmp/
 output/
+
+# local toolbox
+.tools/
