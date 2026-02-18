@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 function Run([string]$line) {
   Write-Host "Running: $line" -ForegroundColor Cyan
@@ -17,6 +17,7 @@ Run "python -m compileall -q src"
 
 # 2) Install editable FIRST so src-layout imports work in tests
 Run "python -m pip install -e ."
+Run "python -c ""import yyfe_lab; import yyfe_lab.math_utils; print('IMPORT_OK')"""
 
 # 3) Tests (now imports resolve)
 Run "python -m pytest -q"
