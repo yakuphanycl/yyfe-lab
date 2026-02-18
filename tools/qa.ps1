@@ -1,28 +1,21 @@
-﻿$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = "Stop"
 
-function Run([string]$line) {
-  Write-Host "Running: $line" -ForegroundColor Cyan
-  & powershell -NoProfile -Command $line
+function RunPy([string[]]$argv) {
+  Write-Host ("Running: python " + ($argv -join " ")) -ForegroundColor Cyan
+  & python @argv
   if ($LASTEXITCODE -ne 0) {
-    throw "Command failed (exit=$LASTEXITCODE): $line"
+    throw ("Command failed (exit=" + $LASTEXITCODE + "): python " + ($argv -join " "))
   }
 }
 
 Write-Host ""
 Write-Host "YY-FE QA: start" -ForegroundColor Green
-Write-Host "PWD: $(Get-Location)" -ForegroundColor DarkGray
+Write-Host ("PWD: " + (Get-Location)) -ForegroundColor DarkGray
 
-# 1) Syntax/bytecode sanity
-Run "python -m compileall -q src"
-
-# 2) Install editable FIRST so src-layout imports work in tests
-Run "python -m pip install -e ."
-Run "python -c ""import yyfe_lab; import yyfe_lab.math_utils; print('IMPORT_OK')"""
-
-# 3) Tests (now imports resolve)
-Run "python -m pytest -q"
-
-# 4) Build artifacts
-Run "python -m build"
+RunPy @("-m","compileall","-q","src")
+RunPy @("-m","pip","install","-e",".")
+RunPy @("-c","import yyfe_lab; import yyfe_lab.math_utils; print('IMPORT_OK')")
+RunPy @("-m","pytest","-q")
+RunPy @("-m","build")
 
 Write-Host "YY-FE QA: PASS" -ForegroundColor Green
