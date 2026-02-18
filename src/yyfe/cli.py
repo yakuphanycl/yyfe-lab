@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -72,25 +72,27 @@ def main() -> int:
 
         plan_path = Path(getattr(args, "plan", "output/plan.json"))
         if not plan_path.exists():
-            print("APPLY_ERR: missing plan file: {plan_path}. Run `yyfe plan` first (or pass --plan PATH).
-            return 2
+            print(
+                f"APPLY_ERR: missing plan file: {plan_path}. Run `yyfe plan` or pass --plan PATH."
+            )
 
+            return 2
         plan = json.loads(plan_path.read_text(encoding="utf-8-sig"))
 
         # --- V0.2 safety: validate plan schema + allowlist ---
         if not isinstance(plan, dict):
             print("APPLY_ERR: plan.json must be an object.")
-            return 2
 
+            return 2
         if plan.get("version") != "0.1":
             print(f"APPLY_ERR: unsupported plan version: {plan.get('version')!r}")
-            return 2
 
+            return 2
         actions = plan.get("actions")
         if not isinstance(actions, list):
             print("APPLY_ERR: actions must be a list.")
-            return 2
 
+            return 2
         # Allowlist ONLY the golden script. Anything else is rejected.
         allowed_cmd = [
             "powershell",
@@ -102,21 +104,33 @@ def main() -> int:
         ]
 
         # For now, apply just executes the actions sequentially.
-        for a in plan.get("actions", []):
+
+        for a in actions:
             if not isinstance(a, dict):
                 print(f"APPLY_ERR: invalid action entry: {a!r}")
+
                 return 2
 
-            if a.get("type") == "run":
-                cmd = a.get("cmd")
-                if cmd != allowed_cmd:
-                    print(f"APPLY_ERR: blocked cmd (not allowlisted): {cmd!r}")
-                    return 2
-                r = run(cmd)
-                print(r.stdout, end="")
-                if not r.ok:
-                    print(r.stderr, end="")
-                    return r.exit_code
+            if a.get("type") != "run":
+                print(f"APPLY_ERR: unsupported action type: {a.get('type')!r}")
+
+                return 2
+
+            cmd = a.get("cmd")
+
+            if cmd != allowed_cmd:
+                print(f"APPLY_ERR: blocked cmd (not allowlisted): {cmd!r}")
+
+                return 2
+
+            r = run(cmd)
+
+            print(r.stdout, end="")
+
+            if not r.ok:
+                print(r.stderr, end="")
+
+                return r.exit_code
 
         print("APPLY_OK")
         return 0
@@ -125,4 +139,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
