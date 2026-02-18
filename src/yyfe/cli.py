@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -10,9 +10,10 @@ from yyfe.core.runner import run
 def main() -> int:
     ap = argparse.ArgumentParser(prog="yyfe", description="YY-FE v0.1 lab engine")
     ap.add_argument("--policy", default="policy.json", help="Path to policy.json")
+    ap.add_argument("--out", default="output/plan.json", help="(plan) Path to write plan.json")
+    ap.add_argument("--plan", default="output/plan.json", help="(apply) Path to read plan.json")
     ap.add_argument("cmd", choices=["golden", "plan", "apply"], help="Command to run")
     args = ap.parse_args()
-
     _ = Policy.load(args.policy)
 
     if args.cmd == "golden":
@@ -38,8 +39,8 @@ def main() -> int:
 
         out_dir = Path("output")
         out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / "plan.json"
-
+        out_path = Path(getattr(args, "out", "output/plan.json"))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
         # NOTE: adjust these calls if your core API differs.
         # Minimal "plan": for now, just record that we can run golden.
         plan = {
@@ -69,9 +70,9 @@ def main() -> int:
         import json
         from pathlib import Path
 
-        plan_path = Path("output") / "plan.json"
+        plan_path = Path(getattr(args, "plan", "output/plan.json"))
         if not plan_path.exists():
-            print("APPLY_ERR: missing output/plan.json. Run `yyfe plan` first.")
+            print("APPLY_ERR: missing plan file: {plan_path}. Run `yyfe plan` first (or pass --plan PATH).
             return 2
 
         plan = json.loads(plan_path.read_text(encoding="utf-8-sig"))
@@ -124,3 +125,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
