@@ -16,3 +16,9 @@ __pycache__/
 # setuptools egg-info
 **/*.egg-info/
 
+
+# python caches
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
