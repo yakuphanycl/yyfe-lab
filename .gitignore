@@ -3,3 +3,12 @@
 .venv/
 logs/
 patches/
+
+# build artifacts
+dist/
+build/
+*.egg-info/
+
+# python caches
+__pycache__/
+*.pyc
